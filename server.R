@@ -16,7 +16,7 @@ shinyServer(function(input, output, session) {
         lgd_text_size <<- input$lgd_text_size; chr_data <<- input$upload_chr_data
         
         if (!is.null(input$upload_chr_data)) {
-          data.chr <<- data.frame(fread(chr_data$datapath, quote=""), stringsAsFactors = F)
+          data.chr <<- fread(chr_data$datapath, quote="", data.table = F)
           data.chr.raw <<- data.chr
         } else{
           data.chr <<- NULL
@@ -31,7 +31,7 @@ shinyServer(function(input, output, session) {
           trackfil <- input[[paste("uploaddata", x, sep = "")]]
           if (get(paste("sel_upload_data", x, sep = "")) == 2 & !is.null(trackfil)) {
             upload_file.export <<- c(upload_file.export, trackfil$name)
-            data.frame(fread(trackfil$datapath, quote=""), stringsAsFactors = F)
+            fread(trackfil$datapath, quote="", data.table = F)
           }
         })
         
@@ -249,7 +249,7 @@ shinyServer(function(input, output, session) {
           ## *** Download PDF file ***
           output$downloadpdf1 <- renderUI({
             req(figure_1)
-            downloadButton("Visualization_1.pdf", "Download pdf-file")
+            downloadButton("Visualization_1.pdf", "Download PDF file")
           })
           
           output$Visualization_1.pdf <- downloadHandler(
@@ -265,7 +265,7 @@ shinyServer(function(input, output, session) {
           ## *** Download SVG file ***
           output$downloadsvg1 <- renderUI({
             req(figure_1)
-            downloadButton("Visualization_1.svg", "Download svg-file")
+            downloadButton("Visualization_1.svg", "Download SVG file")
           })
           
           output$Visualization_1.svg <- downloadHandler(
@@ -335,14 +335,14 @@ shinyServer(function(input, output, session) {
         
         # user input data
         if (!is.null(tc_chr_data1)) {
-          data.chr1 <<- data.frame(fread(tc_chr_data1$datapath, quote=""), stringsAsFactors = F)
+          data.chr1 <<- fread(tc_chr_data1$datapath, quote="", data.table = F)
           data.chr1.raw <<- data.chr1
         } else{
           data.chr1 <<- NULL
         }
         
         if (!is.null(tc_chr_data2)) {
-          data.chr2 <<- data.frame(fread(tc_chr_data2$datapath, quote=""), stringsAsFactors = F)
+          data.chr2 <<- fread(tc_chr_data2$datapath, quote="", data.table = F)
           data.chr2.raw <<- data.chr2
         } else{
           data.chr2 <<- NULL
@@ -350,7 +350,7 @@ shinyServer(function(input, output, session) {
         
         trackfil <<- input$tc_uploaddata
         if (!is.null(trackfil)) {
-          data.2geno.plot <<- data.frame(fread(trackfil$datapath, quote=""), stringsAsFactors = F)
+          data.2geno.plot <<- fread(trackfil$datapath, quote="", data.table = F)
           data.2geno.plot.raw <<- data.2geno.plot
         } else{
           data.2geno.plot <<- NULL
@@ -451,7 +451,7 @@ shinyServer(function(input, output, session) {
           ## *** Download PDF file ***
           output$downloadpdf2 <- renderUI({
             req(figure_2)
-            downloadButton("Visualization_2.pdf", "Download pdf-file")
+            downloadButton("Visualization_2.pdf", "Download PDF file")
           })
           
           output$Visualization_2.pdf <- downloadHandler(
@@ -467,7 +467,7 @@ shinyServer(function(input, output, session) {
           ## *** Download SVG file ***
           output$downloadsvg2 <- renderUI({
             req(figure_2)
-            downloadButton("Visualization_2.svg", "Download svg-file")
+            downloadButton("Visualization_2.svg", "Download SVG file")
           })
           
           output$Visualization_2.svg <- downloadHandler(
@@ -503,7 +503,7 @@ shinyServer(function(input, output, session) {
               write.table(data.2geno.plot.raw, trackfil$name, row.names = F, quote=F, sep="\t")              
               files <- c("Script_2.R", "writeCmd-2_function.R", tc_chr_data1$name, tc_chr_data2$name, trackfil$name)
               
-              #create the zip file
+              # create the zip file
               zip(file, files)
               file.remove(files)
               
@@ -668,7 +668,11 @@ shinyServer(function(input, output, session) {
   
   ## *** User Manual ***
   output$pdfview <- renderUI({
-    tags$iframe(style = "height:1500px; width:100%; scrolling=yes", src = "shinyChromosome_User_Manual.pdf")
+    tags$iframe(style = "height:900px; width:100%; scrolling=yes", src = "shinyChromosome_User_Manual.pdf")
+  })
+  
+  output$pdfview1 <- renderUI({
+    tags$iframe(style = "height:900px; width:100%; scrolling=yes", src = "shinyChromosome_User_Manual_Chinese.pdf")
   })
   
   ## *** View example data ***
